@@ -17,10 +17,11 @@ import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
-  background-color: ${({theme}) => theme.bg};
+  background-color: ${({theme}) => theme.bgLighter};
   color: ${({theme}) => theme.text};
   height: 100vh;
   font-size: 14px;
@@ -39,6 +40,7 @@ const Logo = styled.div`
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 25px;
+  
 `;
 
 const Img = styled.img`
@@ -85,10 +87,12 @@ function Menu({setDarkMode, darkMode}) {
   return (
     <Container>
       <Wrapper>
-        <Logo>
-          <Img src={logo}></Img>
-          SkyTube
-        </Logo>
+        <Link to="/" style={{textDecoration: "none", color: "inherit"}}>
+          <Logo>
+            <Img src={logo}></Img>
+            SkyTube
+          </Logo>
+        </Link>
         <Item>
           <HomeIcon/>
           Home

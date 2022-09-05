@@ -8,7 +8,7 @@ export const darkTheme = {
 
 export const lightTheme = {
     bg: "#f9f9f9",
-    bgLighter: "whitesmoke",
+    bgLighter: "white",
     text: "black",
     textSoft: "#606060",
     soft: "#f1f1f1"
