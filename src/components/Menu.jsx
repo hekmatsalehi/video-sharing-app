@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import logo from "../images/logo.png";
-import HomeIcon from '@mui/icons-material/Home';
-import ExploreIcon from '@mui/icons-material/Explore';
-import SubscriptionsIcon from '@mui/icons-material/Subscriptions';
+import HomeIcon from "@mui/icons-material/Home";
+import ExploreIcon from "@mui/icons-material/Explore";
+import SubscriptionsIcon from "@mui/icons-material/Subscriptions";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
 import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
 import LibraryMusicOutlinedIcon from "@mui/icons-material/LibraryMusicOutlined";
@@ -21,8 +21,8 @@ import { Link } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
-  background-color: ${({theme}) => theme.bgLighter};
-  color: ${({theme}) => theme.text};
+  background-color: ${({ theme }) => theme.bgLighter};
+  color: ${({ theme }) => theme.text};
   height: 100vh;
   font-size: 14px;
   position: sticky;
@@ -40,7 +40,6 @@ const Logo = styled.div`
   font-weight: bold;
   font-size: 18px;
   margin-bottom: 25px;
-  
 `;
 
 const Img = styled.img`
@@ -53,16 +52,14 @@ const Item = styled.div`
   gap: 20px;
   cursor: pointer;
   padding: 7.5px 0px;
-`
+`;
 
 const Hr = styled.hr`
   margin: 15px 0px;
-  border: 0.5px solid ${({theme}) => theme.soft};
+  border: 0.5px solid ${({ theme }) => theme.soft};
 `;
 
-const Login = styled.div`
-  
-`;
+const Login = styled.div``;
 
 const Button = styled.button`
   padding: 5px 15px;
@@ -83,87 +80,87 @@ const Title = styled.h2`
   color: #aaaaaa;
   margin-bottom: 20px;
 `;
-function Menu({setDarkMode, darkMode}) {
+function Menu({ setDarkMode, darkMode }) {
   return (
     <Container>
       <Wrapper>
-        <Link to="/" style={{textDecoration: "none", color: "inherit"}}>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
             <Img src={logo}></Img>
             SkyTube
           </Logo>
         </Link>
         <Item>
-          <HomeIcon/>
+          <HomeIcon />
           Home
         </Item>
         <Item>
-          <ExploreIcon/>
+          <ExploreIcon />
           Explore
         </Item>
         <Item>
-          <SubscriptionsIcon/>
+          <SubscriptionsIcon />
           Subscriptions
         </Item>
-        <Hr/>
+        <Hr />
         <Item>
-          <VideoLibraryOutlinedIcon/>
+          <VideoLibraryOutlinedIcon />
           Library
         </Item>
         <Item>
-          <HistoryOutlinedIcon/>
+          <HistoryOutlinedIcon />
           History
         </Item>
-        <Hr/>
+        <Hr />
         <Login>
           Sign in to like videos, comment, and subscribe.
           <Button>
-            <AccountCircleOutlinedIcon/>
+            <AccountCircleOutlinedIcon />
             SING IN
           </Button>
         </Login>
-        <Hr/>
+        <Hr />
         <Title>BEST OF SKYTUBE</Title>
         <Item>
-          <LibraryMusicOutlinedIcon/>
+          <LibraryMusicOutlinedIcon />
           Music
         </Item>
         <Item>
-          <SportsBasketballOutlinedIcon/>
+          <SportsBasketballOutlinedIcon />
           Sport
         </Item>
         <Item>
-          <SportsEsportsOutlinedIcon/>
+          <SportsEsportsOutlinedIcon />
           Gaming
         </Item>
         <Item>
-          <MovieOutlinedIcon/>
+          <MovieOutlinedIcon />
           Movies
         </Item>
         <Item>
-          <ArticleOutlinedIcon/>
+          <ArticleOutlinedIcon />
           News
         </Item>
         <Item>
-          <LiveTvOutlinedIcon/>
+          <LiveTvOutlinedIcon />
           Live
         </Item>
-        <Hr/>
+        <Hr />
         <Item>
-          <SettingsOutlinedIcon/>
+          <SettingsOutlinedIcon />
           Settings
         </Item>
         <Item>
-          <FlagOutlinedIcon/>
+          <FlagOutlinedIcon />
           Report
         </Item>
         <Item>
-          <HelpOutlineOutlinedIcon/>
+          <HelpOutlineOutlinedIcon />
           Help
         </Item>
         <Item onClick={() => setDarkMode(!darkMode)}>
-          <SettingsBrightnessOutlinedIcon/>
-          Light Mode
+          <SettingsBrightnessOutlinedIcon />
+          {darkMode ? "Light" : "Dark"} Mode
         </Item>
       </Wrapper>
     </Container>
