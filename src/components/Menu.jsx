@@ -52,6 +52,9 @@ const Item = styled.div`
   gap: 20px;
   cursor: pointer;
   padding: 7.5px 0px;
+  &:hover {
+    background-color: ${({theme}) => theme.soft};
+  }
 `;
 
 const Hr = styled.hr`
@@ -114,10 +117,12 @@ function Menu({ setDarkMode, darkMode }) {
         <Hr />
         <Login>
           Sign in to like videos, comment, and subscribe.
-          <Button>
-            <AccountCircleOutlinedIcon />
-            SING IN
-          </Button>
+          <Link to="/login" style={{textDecoration: "none"}}>
+            <Button>
+              <AccountCircleOutlinedIcon />
+              SING IN
+            </Button>
+          </Link>
         </Login>
         <Hr />
         <Title>BEST OF SKYTUBE</Title>
