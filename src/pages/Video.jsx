@@ -1,11 +1,14 @@
-import { AddTaskOutlined, PlaylistAdd, ReplyOutlined, ThumbDownAltOutlined, ThumbUpAltOutlined } from "@mui/icons-material";
 import React from "react";
 import styled from "styled-components";
+import Comments from "../components/Comments";
+import {PlaylistAdd, ReplyOutlined, ThumbDownAltOutlined, ThumbUpAltOutlined } from "@mui/icons-material";
+import VideoCard from "../components/VideoCard";
 
 const Container = styled.div`
   display: flex;
   gap: 24px;
 `;
+
 const Content = styled.div`
   flex: 5;
 `;
@@ -19,6 +22,7 @@ const Title = styled.h1`
   margin-bottom: 10px;
   color: ${({ theme }) => theme.text};
 `;
+
 const Details = styled.div`
   display: flex;
   justify-content: space-between;
@@ -26,14 +30,17 @@ const Details = styled.div`
   font-size: 14px;
   font-weight: 500;
 `;
+
 const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
+
 const Butttons = styled.div`
   color: ${({theme}) => theme.text};
   display: flex;
   gap: 20px;
 `;
+
 const Button = styled.div`
   display: flex;
   align-items: center;
@@ -42,9 +49,10 @@ const Button = styled.div`
 `;
 
 const Hr = styled.hr`
-margin: 15px 0px;
+  margin: 15px 0px;
   border: 0.5px solid ${({ theme }) => theme.soft};
 `;
+
 const Recommedation = styled.div`
   flex: 2;
 `;
@@ -53,13 +61,10 @@ const Channel = styled.div`
   display: flex;
   justify-content: space-between;
 `
-
 const ChannelInfo = styled.div`
   display: flex;
   gap: 20px;
-  background-color: blue;
 `
-
 const Image = styled.img`
   width: 50px;
   height: 50px;
@@ -93,6 +98,7 @@ const Subscribe = styled.button`
   height: max-content;
   padding: 10px 20px;
   cursor: pointer;
+  margin-top: 5px;
 `
 function Video() {
   return (
@@ -122,7 +128,7 @@ function Video() {
         <Hr/>
         <Channel>
           <ChannelInfo>
-              <Image src="https://images.unsplash.com/photo-1506099914961-765be7a97019?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTl8fHdpbGR8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"/>
+              <Image src="https://media.istockphoto.com/photos/galloping-wild-horses-picture-id1290560472?b=1&k=20&m=1290560472&s=170667a&w=0&h=UpuskPmK57aYwNgFBWbQqEygAITrY5lFqvfkLxcuwBc="/>
             <ChannelDetails>
               <ChannelName>Animal Planet</ChannelName>
               <ChannelCounter>2.1M subscribers</ChannelCounter>
@@ -133,8 +139,25 @@ function Video() {
             <Button>SUBSCRIBE</Button>
           </Subscribe>
         </Channel>
+        <Hr/>
+        <Comments/>
       </Content>
-      <Recommedation>Recommendation</Recommedation>
+      <Recommedation>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+        <VideoCard type="small"/>
+      </Recommedation>
     </Container>
   );
 }
