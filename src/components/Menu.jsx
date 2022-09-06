@@ -76,6 +76,12 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   gap: 5px;
+
+  &:hover {
+    border: 1px solid #0086fc;
+    color: #0086fc;
+    transition: ease-out 0.2s;
+  }
 `;
 
 const Title = styled.h2`
@@ -120,7 +126,7 @@ function Menu({ setDarkMode, darkMode }) {
           <Link to="/login" style={{textDecoration: "none"}}>
             <Button>
               <AccountCircleOutlinedIcon />
-              SING IN
+              SIGN IN
             </Button>
           </Link>
         </Login>

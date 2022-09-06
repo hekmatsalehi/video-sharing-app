@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Video from "./pages/Video";
 import Home from "./pages/Home";
+import Login from "./pages/Login";
 
 const Container = styled.div`
   display: flex;
@@ -36,6 +37,7 @@ function App() {
               <Routes>
                 <Route path="/">
                   <Route index element={<Home/>}/>
+                  <Route path="login" element={<Login/>}/>
                   <Route path="video">
                     <Route path=":id" element={<Video/>} />
                   </Route>
