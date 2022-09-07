@@ -17,13 +17,14 @@ import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Container = styled.div`
   flex: 1;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
-  height: 100vh;
+  min-height: 100vh;
+  height: ${(props) => props.type !== "login" && "100vh"};
   font-size: 14px;
   position: sticky;
   top: 0;
@@ -90,8 +91,12 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `;
 function Menu({ setDarkMode, darkMode }) {
+  // for changing the menu style in login page
+  const location = useLocation();
+  const path = location.pathname.split("/")[1];
+
   return (
-    <Container>
+    <Container type={path}>
       <Wrapper>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
