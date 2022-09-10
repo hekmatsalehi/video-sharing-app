@@ -20,25 +20,18 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import { Link, useLocation } from "react-router-dom";
 
 const Container = styled.div`
-  flex: 1.3;
+  flex: 1;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   min-height: 100vh;
   height: ${(props) => props.type !== "login" && "100vh"};
   font-size: 14px;
   position: sticky;
-  box-sizing: border-box;
   top: 0;
-  overflow: scroll;
-  
-  &::-webkit-scrollbar {
-    display: none;
-   
-  } 
 `;
 
 const Wrapper = styled.div`
-  padding-bottom: 18px;
+  padding: 18px 27px;
 `;
 
 const Logo = styled.div`
@@ -47,14 +40,7 @@ const Logo = styled.div`
   gap: 5px;
   font-weight: bold;
   font-size: 18px;
-  margin-bottom: 13px;
-  padding: 0px 27px;
-  padding-top: 18px;
-  padding-bottom: 12px;
-  position: sticky;
-  top: 0;
-  background-color: ${({ theme }) => theme.bgLighter};
-
+  margin-bottom: 25px;
 `;
 
 const Img = styled.img`
@@ -66,7 +52,7 @@ const Item = styled.div`
   align-items: center;
   gap: 20px;
   cursor: pointer;
-  padding: 7px 27px;
+  padding: 7.5px 0px;
   &:hover {
     background-color: ${({theme}) => theme.soft};
   }
@@ -77,9 +63,7 @@ const Hr = styled.hr`
   border: 0.5px solid ${({ theme }) => theme.soft};
 `;
 
-const Login = styled.div`
-padding: 0px 27px;
-`;
+const Login = styled.div``;
 
 const Button = styled.button`
   padding: 5px 15px;
@@ -105,7 +89,6 @@ const Title = styled.h2`
   font-size: 14px;
   color: #aaaaaa;
   margin-bottom: 20px;
-  margin-left: 27px;
 `;
 function Menu({ setDarkMode, darkMode }) {
   // for changing the menu style in login page
