@@ -107,7 +107,7 @@ function Video() {
         <VideoWrapper>
           <iframe
             width="100%"
-            height="720"
+            height="600"
             src="https://www.youtube.com/embed/nImK2qsYoFM"
             title="Untouched Wilderness in America's Northernmost National Park - Gates of the Arctic"
             frameborder="0"
