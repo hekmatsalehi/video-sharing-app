@@ -1,5 +1,6 @@
 import { createError } from "../error.js"
-import User from "../models/User.js"
+import User from "../models/User.js";
+import Video from "../models/Video.js";
 import bcrypt from "bcryptjs";
 
 export const updateUser = async (req, res, next) => {
@@ -78,8 +79,14 @@ export const unsubscribe = async (req, res, next) => {
 }
 
 export const like = async (req, res, next) => {
+    const id = req.user.id;
+    const videoId = req.params.videoId;
     try {
-
+      await Video.findByIdAndUpdate(videoId, {
+        $addToSet: { likes: id },// addToSet method push the id only once
+        $pull: { dislikes: id }
+      })
+      res.status(200).json("The video is liked!")  
     } catch (error) {
         next(error)
     }
@@ -87,8 +94,14 @@ export const like = async (req, res, next) => {
 }
 
 export const dislike = async (req, res, next) => {
+    const id = req.user.id;
+    const videoId = req.params.videoId;
     try {
-
+      await Video.findByIdAndUpdate(videoId, {
+        $addToSet: { dislikes: id },// addToSet method push the id only once
+        $pull: { likes: id }
+      })
+      res.status(200).json("The video is disliked!")
     } catch (error) {
         next(error)
     }
