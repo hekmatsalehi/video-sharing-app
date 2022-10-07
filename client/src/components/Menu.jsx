@@ -18,6 +18,7 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   flex: 1.3;
@@ -112,6 +113,9 @@ function Menu({ setDarkMode, darkMode }) {
   const location = useLocation();
   const path = location.pathname.split("/")[1];
 
+  const currentUser = useSelector((state) => state.user.currentUser)
+  console.log(currentUser)
+
   return (
     <Container type={path}>
       <Wrapper>
@@ -147,16 +151,18 @@ function Menu({ setDarkMode, darkMode }) {
           History
         </Item>
         <Hr />
-        <Login>
-          Sign in to like videos, comment, and subscribe.
-          <Link to="/login" style={{textDecoration: "none"}}>
-            <Button>
-              <AccountCircleOutlinedIcon />
-              SIGN IN
-            </Button>
-          </Link>
-        </Login>
-        <Hr />
+        {!currentUser && <>
+          <Login>
+            Sign in to like videos, comment, and subscribe.
+            <Link to="/login" style={{textDecoration: "none"}}>
+              <Button>
+                <AccountCircleOutlinedIcon />
+                SIGN IN
+              </Button>
+            </Link>
+          </Login>
+          <Hr />
+        </>}
         <Title>BEST OF SKYTUBE</Title>
         <Item>
           <LibraryMusicOutlinedIcon />
