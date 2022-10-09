@@ -1,10 +1,11 @@
-import React from "react";
 import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { VideoCallOutlined } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { LogoutOutlined, VideoCallOutlined } from "@mui/icons-material";
+import { logout } from "../redux/userSlice";
+import { useState, useEffect, useRef } from "react";
 
 const Container = styled.div`
   position: sticky;
@@ -57,6 +58,7 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   gap: 5px;
+  align-self: center;
 
   &:hover {
     border: 1px solid #0086fc;
@@ -68,20 +70,76 @@ const Button = styled.button`
 const User = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 20px;
   font-weight: 500;
-  color: ${({theme}) => theme.text};
+  color: ${({ theme }) => theme.text};
 `;
 
-const Avatar = styled.div`
+const Avatar = styled.img`
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background-color: #999;
+  cursor: pointer;
 `;
-function Navbar() {
 
+const SubMenu = styled.div`
+  background-color: ${({ theme }) => theme.bgLighter};
+  color: ${({ theme }) => theme.text};
+  font-size: 14px;
+  box-sizing: border-box;
+  position: absolute;
+  top: 56px;
+  border: 1px solid ${({ theme }) => theme.soft};
+  border-top: none;
+  padding: 20px;
+`;
+
+const SubMenuWrapper = styled.div`
+  padding-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const Hr = styled.hr`
+  margin: 5px 0px;
+  border: 0.5px solid ${({ theme }) => theme.soft};
+`;
+
+const Item = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+function Navbar() {
+  const [subMenu, setSubMenu] = useState(false);
+  const subMenuRef = useRef();
+  const avatarRef = useRef();
+
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
+
+  const handleSignOut = () => {
+    dispatch(logout());
+  };
+
+  const toggleSubMenu = () => {
+    setSubMenu(!subMenu);
+  };
+
+  // Sub menu closes when clicked outside the subMenu or avatar icon
+  useEffect(() => {
+    document.addEventListener("mousedown", (event) => {
+      if (
+        !subMenuRef.current.contains(event.target) &&
+        !avatarRef.current.contains(event.target)
+      ) {
+        setSubMenu(false);
+      }
+    });
+  }, []);
+
   return (
     <Container>
       <Wrapper>
@@ -90,17 +148,39 @@ function Navbar() {
           <SearchOutlinedIcon />
         </Search>
         {currentUser ? (
-          <User>
-            <VideoCallOutlined/>
-            <Avatar/>
-            {currentUser.name}
-          </User>
-        ): <Link to="/login" style={{textDecoration: "none"}}>
-          <Button>
-            <AccountCircleOutlinedIcon />
-            SIGN IN
-          </Button>
-        </Link>}
+          <>
+            <User>
+              <VideoCallOutlined />
+              <Avatar
+                src={currentUser.image}
+                onClick={toggleSubMenu}
+                ref={avatarRef}
+              />
+            </User>
+            {subMenu && (
+              <SubMenu ref={subMenuRef}>
+                <SubMenuWrapper>
+                  <Item>
+                    <Avatar src={currentUser.image} />
+                    {currentUser.name}
+                  </Item>
+                  <Hr />
+                  <Button onClick={handleSignOut}>
+                    <LogoutOutlined />
+                    SIGN OUT
+                  </Button>
+                </SubMenuWrapper>
+              </SubMenu>
+            )}
+          </>
+        ) : (
+          <Link to="/login" style={{ textDecoration: "none" }}>
+            <Button>
+              <AccountCircleOutlinedIcon />
+              SIGN IN
+            </Button>
+          </Link>
+        )}
       </Wrapper>
     </Container>
   );

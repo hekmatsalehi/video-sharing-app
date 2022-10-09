@@ -108,13 +108,13 @@ const Title = styled.h2`
   margin-bottom: 20px;
   margin-left: 27px;
 `;
+
 function Menu({ setDarkMode, darkMode }) {
   // for changing the menu style in login page
   const location = useLocation();
   const path = location.pathname.split("/")[1];
 
   const currentUser = useSelector((state) => state.user.currentUser)
-  console.log(currentUser)
 
   return (
     <Container type={path}>
