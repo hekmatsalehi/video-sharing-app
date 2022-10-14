@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice";
-import { auth, provider } from "../firebase"
-import {signInWithPopup} from "firebase/auth"
+import { auth, provider } from "../firebase";
+import { signInWithPopup } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -35,11 +36,20 @@ const SubTitle = styled.h2`
   font-weight: 300;
 `;
 
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+`;
+
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
   border-radius: 3px;
   padding: 10px;
-  padding-right:40px;
+  padding-right: 40px;
   background-color: transparent;
   width: 100%;
   color: ${({ theme }) => theme.text};
@@ -52,8 +62,7 @@ const Button = styled.button`
   padding: 10px;
   padding-left: 25px;
   padding-right: 25px;
-  margin-top: 10px;
-  
+  margin: 5px 0px;
   width: 100%;
   font-weight: 500;
   background-color: ${({ theme }) => theme.soft};
@@ -83,56 +92,108 @@ const Link = styled.span`
 `;
 
 function Login() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginStart())
+    if (!name || !password) {
+      return;
+    }
+    dispatch(loginStart());
 
     try {
       const response = await axios.post("/auth/login", { name, password });
-      dispatch(loginSuccess(response.data))
+      dispatch(loginSuccess(response.data));
+      navigate("/");
     } catch (error) {
-      dispatch(loginFailure()) 
+      dispatch(loginFailure());
     }
-  }
+  };
 
   const signinWithGoogle = () => {
-    dispatch(loginStart())
+    dispatch(loginStart());
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        axios.post("/auth/google", {
-          name: result.user.displayName,
-          email: result.user.email,
-          image: result.user.photoURL
-        })
-        .then((response) => {
-          dispatch(loginSuccess(response.data))
-        })
+        axios
+          .post("/auth/google", {
+            name: result.user.displayName,
+            email: result.user.email,
+            image: result.user.photoURL,
+          })
+          .then((response) => {
+            dispatch(loginSuccess(response.data));
+            navigate("/");
+          });
       })
       .catch((error) => {
-        dispatch(loginFailure())
-      })
-  }
+        dispatch(loginFailure());
+      });
+  };
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    if (!name || !email || !password) {
+      return;
+    }
+    try {
+      const newUser = await axios.post("/auth/signup", {
+        name,
+        email,
+        password,
+      });
+      dispatch(loginStart());
+      dispatch(loginSuccess(newUser.data));
+      navigate("/");
+    } catch (error) {
+      dispatch(loginFailure(error));
+    }
+  };
+
   return (
     <Container>
       <Wrapper>
         <Title>Sign in</Title>
         <SubTitle>to continue to SkyTube</SubTitle>
-        <Input placeholder="username" onChange={(e) => setName(e.target.value)} />
-        <Input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-        <Button onClick={handleLogin}>Sign in</Button>
+        <Form>
+          <Input
+            placeholder="username"
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button type="submit" onClick={handleLogin}>
+            Sign in
+          </Button>
+        </Form>
         <Button onClick={signinWithGoogle}>Sign in with Google</Button>
-        <Input placeholder="username" onChange={(e) => setName(e.target.value)}/>
-        <Input type="email" placeholder="email" onChange={(e) => setEmail(e.target.value)} />
-        <Input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />
-        <Button>Sign up</Button>
+        <Form>
+          <Input
+            placeholder="username"
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button type="submit" onClick={handleSignup}>
+            Sign up
+          </Button>
+        </Form>
       </Wrapper>
       <More>
         English(USA)
