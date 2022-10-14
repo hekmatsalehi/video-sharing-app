@@ -1,8 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 import Comments from "../components/Comments";
-import {PlaylistAdd, ReplyOutlined, ThumbDownAltOutlined, ThumbUpAltOutlined } from "@mui/icons-material";
+import {
+  PlaylistAdd,
+  ReplyOutlined,
+  ThumbDown,
+  ThumbDownAltOutlined,
+  ThumbUp,
+  ThumbUpAltOutlined,
+} from "@mui/icons-material";
 import VideoCard from "../components/VideoCard";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import { fetchFailure, fetchSuccess } from "../redux/videoSlice";
+import { format } from "timeago.js";
+import { like, dislike } from "../redux/videoSlice";
+import { subscription } from "../redux/userSlice";
 
 const Container = styled.div`
   display: flex;
@@ -36,7 +52,7 @@ const Info = styled.div`
 `;
 
 const Butttons = styled.div`
-  color: ${({theme}) => theme.text};
+  color: ${({ theme }) => theme.text};
   display: flex;
   gap: 20px;
 `;
@@ -60,35 +76,34 @@ const Recommedation = styled.div`
 const Channel = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 const ChannelInfo = styled.div`
   display: flex;
   gap: 20px;
-`
+`;
 const Image = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50px;
-`
+`;
 const ChannelDetails = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 5px;
-  color: ${({theme}) => theme.text};
-`
+  color: ${({ theme }) => theme.text};
+`;
 const ChannelName = styled.span`
   font-weight: 500;
-
-`
+`;
 const ChannelCounter = styled.span`
   margin-top: 5px;
   margin-bottom: 20px;
   font-size: 12px;
-  color: ${({theme}) => theme.textSoft};
-`
+  color: ${({ theme }) => theme.textSoft};
+`;
 const ChannelDesc = styled.p`
   font-size: 14px;
-`
+`;
 const Subscribe = styled.button`
   background-color: #cc1a00;
   font-weight: 500;
@@ -99,50 +114,115 @@ const Subscribe = styled.button`
   padding: 10px 20px;
   cursor: pointer;
   margin-top: 5px;
+`;
+
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100%;
+  object-fit: cover;
+  background-color: #999;
 `
+
 function Video() {
+  const { currentVideo } = useSelector((state) => state.video);
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const path = useLocation().pathname.split("/")[2];
+
+  const [channel, setChannel] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoResponse = await axios.get(`/videos/find/${path}`);
+        const channelResponse = await axios.get(
+          `/users/find/${videoResponse.data.userId}`
+        );
+        setChannel(channelResponse.data);
+        dispatch(fetchSuccess(videoResponse.data));
+      } catch (error) {
+        dispatch(fetchFailure());
+      }
+    };
+    fetchData();
+  }, [path, dispatch]);
+
+  const handleLike = async () => {
+    await axios.put(`/users/like/${currentVideo._id}`);
+    dispatch(like(currentUser._id));
+  };
+
+  const handleDisike = async () => {
+    await axios.put(`/users/dislike/${currentVideo._id}`);
+    dispatch(dislike(currentUser._id));
+  };
+
+  const handleSubscribe = async () => {
+    // make api call based on the channel subscription
+    currentUser.subscribedUsers.includes(channel._id)
+      ? await axios.put(`/users/unsub/${channel._id}`)
+      : await axios.put(`/users/sub/${channel._id}`);
+    dispatch(subscription(channel._id));
+  };
+
   return (
     <Container>
       <Content>
         <VideoWrapper>
-          <iframe
-            width="100%"
-            height="600"
-            src="https://www.youtube.com/embed/nImK2qsYoFM"
-            title="Untouched Wilderness in America's Northernmost National Park - Gates of the Arctic"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-          ></iframe>
+          <VideoFrame src="https://www.youtube.com/embed/nImK2qsYoFM"/>
         </VideoWrapper>
-        <Title>Test Video</Title>
+        <Title>{currentVideo.title}</Title>
         <Details>
-          <Info>799,222 views &#8226; Apr 01 2021</Info>
+          <Info>
+            {currentVideo.views} views &#8226; {format(currentVideo.createdAt)}
+          </Info>
           <Butttons>
-            <Button><ThumbUpAltOutlined/> 234</Button>
-            <Button><ThumbDownAltOutlined/> DISLIKE</Button>
-            <Button><ReplyOutlined/> SHARE</Button>
-            <Button><PlaylistAdd/> SAVE</Button>
+            <Button onClick={handleLike}>
+              {currentVideo.likes.includes(currentUser?._id) ? (
+                <ThumbUp />
+              ) : (
+                <ThumbUpAltOutlined />
+              )}{" "}
+              {currentVideo.likes?.length}
+            </Button>
+            <Button onClick={handleDisike}>
+              {currentVideo.dislikes.includes(currentUser?._id) ? (
+                <ThumbDown />
+              ) : (
+                <ThumbDownAltOutlined />
+              )}{" "}
+              DISLIKE
+            </Button>
+            <Button>
+              <ReplyOutlined /> SHARE
+            </Button>
+            <Button>
+              <PlaylistAdd /> SAVE
+            </Button>
           </Butttons>
         </Details>
-        <Hr/>
+        <Hr />
         <Channel>
           <ChannelInfo>
-              <Image src="https://media.istockphoto.com/photos/galloping-wild-horses-picture-id1290560472?b=1&k=20&m=1290560472&s=170667a&w=0&h=UpuskPmK57aYwNgFBWbQqEygAITrY5lFqvfkLxcuwBc="/>
+            <Image src={channel.image} />
             <ChannelDetails>
-              <ChannelName>Animal Planet</ChannelName>
-              <ChannelCounter>2.1M subscribers</ChannelCounter>
-              <ChannelDesc>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero nesciunt voluptatum unde nisi iusto dolorum nulla nihil fugit. Soluta ullam praesentium repudiandae accusamus, quidem aut impedit similique obcaecati quod. Quam.</ChannelDesc>
+              <ChannelName>{channel.name}</ChannelName>
+              <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
+              <ChannelDesc>{currentVideo.description}</ChannelDesc>
             </ChannelDetails>
           </ChannelInfo>
           <Subscribe>
-            <Button>SUBSCRIBE</Button>
+            <Button onClick={handleSubscribe}>
+              {currentUser.subscribedUsers?.includes(channel._id)
+                ? "SUBSCRIBED"
+                : "SUBSCRIBE"}
+            </Button>
           </Subscribe>
         </Channel>
-        <Hr/>
-        <Comments/>
+        <Hr />
+        <Comments />
       </Content>
-      <Recommedation>
+      {/* <Recommedation>
         <VideoCard type="small"/>
         <VideoCard type="small"/>
         <VideoCard type="small"/>
@@ -157,7 +237,7 @@ function Video() {
         <VideoCard type="small"/>
         <VideoCard type="small"/>
         <VideoCard type="small"/>
-      </Recommedation>
+      </Recommedation> */}
     </Container>
   );
 }

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LogoutOutlined, VideoCallOutlined } from "@mui/icons-material";
 import { logout } from "../redux/userSlice";
@@ -80,6 +80,7 @@ const Avatar = styled.img`
   height: 32px;
   border-radius: 50%;
   cursor: pointer;
+  object-fit: cover;
 `;
 
 const SubMenu = styled.div`
@@ -92,6 +93,7 @@ const SubMenu = styled.div`
   border: 1px solid ${({ theme }) => theme.soft};
   border-top: none;
   padding: 20px;
+  min-width: 200px;
 `;
 
 const SubMenuWrapper = styled.div`
@@ -117,11 +119,13 @@ function Navbar() {
   const subMenuRef = useRef();
   const avatarRef = useRef();
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.user.currentUser);
 
   const handleSignOut = () => {
     dispatch(logout());
+    navigate("/login");
   };
 
   const toggleSubMenu = () => {
@@ -132,8 +136,8 @@ function Navbar() {
   useEffect(() => {
     document.addEventListener("mousedown", (event) => {
       if (
-        !subMenuRef.current.contains(event.target) &&
-        !avatarRef.current.contains(event.target)
+        !subMenuRef.current?.contains(event.target) &&
+        !avatarRef.current?.contains(event.target)
       ) {
         setSubMenu(false);
       }
@@ -148,31 +152,14 @@ function Navbar() {
           <SearchOutlinedIcon />
         </Search>
         {currentUser ? (
-          <>
-            <User>
-              <VideoCallOutlined />
-              <Avatar
-                src={currentUser.image}
-                onClick={toggleSubMenu}
-                ref={avatarRef}
-              />
-            </User>
-            {subMenu && (
-              <SubMenu ref={subMenuRef}>
-                <SubMenuWrapper>
-                  <Item>
-                    <Avatar src={currentUser.image} />
-                    {currentUser.name}
-                  </Item>
-                  <Hr />
-                  <Button onClick={handleSignOut}>
-                    <LogoutOutlined />
-                    SIGN OUT
-                  </Button>
-                </SubMenuWrapper>
-              </SubMenu>
-            )}
-          </>
+          <User>
+            <VideoCallOutlined />
+            <Avatar
+              src={currentUser.image}
+              onClick={toggleSubMenu}
+              ref={avatarRef}
+            />
+          </User>
         ) : (
           <Link to="/login" style={{ textDecoration: "none" }}>
             <Button>
@@ -180,6 +167,21 @@ function Navbar() {
               SIGN IN
             </Button>
           </Link>
+        )}
+        {subMenu && currentUser && (
+          <SubMenu ref={subMenuRef}>
+            <SubMenuWrapper>
+              <Item>
+                <Avatar src={currentUser.image} />
+                {currentUser.name}
+              </Item>
+              <Hr />
+              <Button onClick={handleSignOut}>
+                <LogoutOutlined />
+                SIGN OUT
+              </Button>
+            </SubMenuWrapper>
+          </SubMenu>
         )}
       </Wrapper>
     </Container>
