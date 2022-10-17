@@ -90,7 +90,19 @@ export const like = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+}
 
+export const undoLike = async (req, res, next) => {
+    const id = req.user.id;
+    const videoId = req.params.videoId;
+    try {
+      await Video.findByIdAndUpdate(videoId, {
+       $pull: { likes: id }
+      })
+      res.status(200).json("The video is unliked!")  
+    } catch (error) {
+        next(error)
+    }
 }
 
 export const dislike = async (req, res, next) => {
@@ -105,5 +117,17 @@ export const dislike = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+}
 
+export const undoDislike = async (req, res, next) => {
+    const id = req.user.id;
+    const videoId = req.params.videoId;
+    try {
+      await Video.findByIdAndUpdate(videoId, {
+        $pull: { dislikes: id }
+      })
+      res.status(200).json("Dislike is undone!")
+    } catch (error) {
+        next(error)
+    }
 }

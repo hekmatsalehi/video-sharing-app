@@ -148,12 +148,17 @@ function Video() {
   }, [path, dispatch]);
 
   const handleLike = async () => {
-    await axios.put(`/users/like/${currentVideo._id}`);
+    // make api call based on liked or undo the like
+    currentVideo.likes.includes(currentUser._id)
+    ? await axios.put(`/users/unlike/${currentVideo._id}`)
+    : await axios.put(`/users/like/${currentVideo._id}`);
     dispatch(like(currentUser._id));
   };
 
   const handleDisike = async () => {
-    await axios.put(`/users/dislike/${currentVideo._id}`);
+    currentVideo.dislikes.includes(currentUser._id)
+    ? await axios.put(`/users/undislike/${currentVideo._id}`)
+    : await axios.put(`/users/dislike/${currentVideo._id}`)
     dispatch(dislike(currentUser._id));
   };
 
@@ -169,7 +174,7 @@ function Video() {
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src="https://www.youtube.com/embed/nImK2qsYoFM"/>
+          <VideoFrame src={currentVideo.videoUrl}/>
         </VideoWrapper>
         <Title>{currentVideo.title}</Title>
         <Details>
@@ -213,14 +218,14 @@ function Video() {
           </ChannelInfo>
           <Subscribe>
             <Button onClick={handleSubscribe}>
-              {currentUser.subscribedUsers?.includes(channel._id)
+              {currentUser?.subscribedUsers.includes(channel._id)
                 ? "SUBSCRIBED"
                 : "SUBSCRIBE"}
             </Button>
           </Subscribe>
         </Channel>
         <Hr />
-        <Comments />
+        <Comments videoId={currentVideo._id}/>
       </Content>
       {/* <Recommedation>
         <VideoCard type="small"/>
