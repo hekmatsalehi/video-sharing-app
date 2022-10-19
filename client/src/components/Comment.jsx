@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
+import { format } from "timeago.js";
 
 const Container = styled.div`
   display: flex;
   gap: 20px;
-
 `;
 
 const Avatar = styled.img`
@@ -17,34 +18,48 @@ const CommentDetails = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  color: ${({theme}) => theme.text};
+  color: ${({ theme }) => theme.text};
 `;
 
 const Name = styled.span`
-    font-size: 14px;
-    font-weight: 500;
+  font-size: 14px;
+  font-weight: 500;
 `;
 
 const Date = styled.span`
-    font-size: 12px;
-    font-weight: 400;
-    color: ${({theme}) => theme.textSoft};
-    margin-left: 5px;
+  font-size: 12px;
+  font-weight: 400;
+  color: ${({ theme }) => theme.textSoft};
+  margin-left: 5px;
 `;
 
 const Text = styled.span`
-    font-size: 14px;
+  font-size: 14px;
 `;
 
-function Comment() {
+function Comment({ comment }) {
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    const fetchComment = async () => {
+      try {
+        const response = await axios.get(`/users/find/${comment.userId}`);
+        setUserInfo(response.data);
+      } catch (error) {}
+    };
+    fetchComment();
+  }, [comment.userId]);
+
   return (
-      <Container>
-        <Avatar src="https://images.unsplash.com/photo-1520792532857-293bd046307a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fHdpbGR8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"/>
-        <CommentDetails>
-          <Name>Ahmad Sha <Date>2 days ago</Date></Name>
-          <Text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit hic eveniet rerum vitae, officiis veniam accusamus! Ullam cupiditate eaque sapiente, ipsam consectetur a dolorum, nisi eos, commodi nobis cumque voluptate.</Text>  
-        </CommentDetails>
-      </Container>
+    <Container>
+      <Avatar src={userInfo.image} />
+      <CommentDetails>
+        <Name>
+          {userInfo.name} <Date>{format(comment.createdAt)}</Date>
+        </Name>
+        <Text>{comment.description}</Text>
+      </CommentDetails>
+    </Container>
   );
 }
 

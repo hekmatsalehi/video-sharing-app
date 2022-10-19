@@ -1,49 +1,64 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
-import Comment from './Comment';
+import { useSelector } from "react-redux";
+import Comment from "./Comment";
+
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 20px;        
-`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 const NewComment = styled.div`
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-top: 5px;   
-`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 5px;
+`;
 const Avatar = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50px;
-`
+`;
 const Input = styled.input`
   border: none;
-  border-bottom: 2px solid ${({theme}) => theme.soft};
+  border-bottom: 2px solid ${({ theme }) => theme.soft};
   background-color: transparent;
   outline: none;
   padding: 5px;
-  color: ${({theme}) => theme.text};
+  color: ${({ theme }) => theme.text};
   width: 100%;
-`
-function Comments() {
+`;
+function Comments({ videoId }) {
+  const { currentUser } = useSelector((state) => state.user);
+  const [comments, setComments] = useState([]);
+  console.log(comments);
+
+  useEffect(() => {
+    // const fetchComments = async () => {
+    //   try {
+    //     const response = await axios.get(`/comments/${videoId}`)
+    //     setComments(response.data)
+    //   } catch (error) {
+    //   }
+    // }
+    // fetchComments()
+    axios
+      .get(`/comments/${videoId}`)
+      .then((response) => setComments(response.data))
+      .catch((error) => console.log(error));
+  }, [videoId]);
   return (
     <Container>
-        <NewComment>
-            <Avatar src="https://images.unsplash.com/photo-1520792532857-293bd046307a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTN8fHdpbGR8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"/>
-            <Input placeholder="Add a comment..."/>
-        </NewComment>
-        <Comment/>
-        <Comment/>
-        <Comment/>
-        <Comment/>
-        <Comment/>
-        <Comment/>
-        <Comment/>
-        <Comment/>
-        <Comment/>
+      <NewComment>
+        <Avatar src={currentUser?.image} />
+        <Input placeholder="Add a comment..." />
+      </NewComment>
+      {comments?.map((comment) => (
+        <Comment key={comment._id} comment={comment} />
+      ))}
     </Container>
-  )
+  );
 }
 
-export default Comments
+export default Comments;
