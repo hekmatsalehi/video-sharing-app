@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LogoutOutlined, VideoCallOutlined } from "@mui/icons-material";
 import { logout } from "../redux/userSlice";
 import { useState, useEffect, useRef } from "react";
+import Upload from "./Upload";
 
 const Container = styled.div`
   position: sticky;
@@ -115,6 +116,7 @@ const Item = styled.div`
 `;
 
 function Navbar() {
+  const [openModal, setOpenModal] = useState(false);
   const [subMenu, setSubMenu] = useState(false);
   const subMenuRef = useRef();
   const avatarRef = useRef();
@@ -132,19 +134,25 @@ function Navbar() {
     setSubMenu(!subMenu);
   };
 
+  const outSideClickHandler = (event) => {
+    if (
+      !subMenuRef.current?.contains(event.target) &&
+      !avatarRef.current?.contains(event.target)
+    ) {
+      setSubMenu(false);
+    }
+  };
   // Sub menu closes when clicked outside the subMenu or avatar icon
   useEffect(() => {
-    document.addEventListener("mousedown", (event) => {
-      if (
-        !subMenuRef.current?.contains(event.target) &&
-        !avatarRef.current?.contains(event.target)
-      ) {
-        setSubMenu(false);
-      }
-    });
+    document.addEventListener("mousedown", outSideClickHandler);
+
+    return () => {
+      document.removeEventListener("mousedown", outSideClickHandler)
+    }
   }, []);
 
   return (
+    <>
     <Container>
       <Wrapper>
         <Search>
@@ -153,7 +161,7 @@ function Navbar() {
         </Search>
         {currentUser ? (
           <User>
-            <VideoCallOutlined />
+            <VideoCallOutlined style={{cursor: "pointer"}}  onClick={() => setOpenModal(true)}/>
             <Avatar
               src={currentUser.image}
               onClick={toggleSubMenu}
@@ -185,6 +193,8 @@ function Navbar() {
         )}
       </Wrapper>
     </Container>
+    {openModal && <Upload setOpenModal={setOpenModal}/>}
+    </>
   );
 }
 
