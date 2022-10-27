@@ -85,6 +85,7 @@ const Image = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 50px;
+  object-fit: cover;
 `;
 const ChannelDetails = styled.div`
   display: flex;

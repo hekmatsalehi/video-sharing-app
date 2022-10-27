@@ -32,6 +32,7 @@ const ChannelLogo = styled.img`
   border-radius: 50%;
   background-color: #999;
   display: ${(props) => props.type === "small" && "none"};
+  object-fit: cover;
 `;
 
 const Texts = styled.div``;
