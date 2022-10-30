@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import {format} from 'timeago.js';
-import axios from "axios"
+import { format } from "timeago.js";
+import axios from "axios";
 
 const Container = styled.div`
-  width: ${(props) => props.type === "small" ? "280px" : "360px"};
-  margin-bottom: ${(props) => props.type === "small" ? "16px" : "32px"};
+  width: ${(props) => (props.type === "small" ? "280px" : "360px")};
+  margin-bottom: ${(props) => (props.type === "small" ? "16px" : "32px")};
   display: ${(props) => props.type === "small" && "flex"};
   gap: 10px;
   cursor: pointer;
 `;
 
 const Image = styled.img`
-  width: ${(props) => props.type === "small" ? "160px" : "100%"};
-  height: ${(props) => props.type === "small" ? "110px" : "202px"};
+  width: ${(props) => (props.type === "small" ? "160px" : "100%")};
+  height: ${(props) => (props.type === "small" ? "110px" : "202px")};
   background-color: #999;
   flex: 1;
 `;
@@ -57,16 +57,15 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-function VideoCard({type, video}) {
+function VideoCard({ type, video }) {
   const [userInfo, setUserInfo] = useState({});
-
   useEffect(() => {
     const fetchUserInfo = async () => {
       const response = await axios.get(`/users/find/${video.userId}`);
-      setUserInfo(response.data)
-    }
-    fetchUserInfo()
-  }, [video.userId])
+      setUserInfo(response.data);
+    };
+    fetchUserInfo();
+  }, [video.userId]);
   return (
     <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       {/* use props for small size of videoCard */}
@@ -77,7 +76,9 @@ function VideoCard({type, video}) {
           <Texts>
             <Title>{video.title}</Title>
             <ChannelName>{userInfo.name}</ChannelName>
-            <Info>{video.views} views &#8226; {format(video.createdAt)}</Info>
+            <Info>
+              {video.views} views &#8226; {format(video.createdAt)}
+            </Info>
           </Texts>
         </Details>
       </Container>

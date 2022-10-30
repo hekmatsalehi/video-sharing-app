@@ -3,7 +3,11 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { LogoutOutlined, VideoCallOutlined } from "@mui/icons-material";
+import {
+  CloseOutlined,
+  LogoutOutlined,
+  VideoCallOutlined,
+} from "@mui/icons-material";
 import { logout } from "../redux/userSlice";
 import { useState, useEffect, useRef } from "react";
 import Upload from "./Upload";
@@ -30,13 +34,22 @@ const Search = styled.div`
   right: 0;
   margin: auto;
   width: 40%;
-  padding: 5px;
+  /* padding: 5px; */
+  padding-left: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border: 1px solid #ccc;
   border-radius: 3px;
   color: ${({ theme }) => theme.text};
+`;
+
+const SearchIconWrapper = styled.div`
+  background-color: ${({ theme }) => theme.soft};
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
 `;
 
 const Input = styled.input`
@@ -118,6 +131,9 @@ const Item = styled.div`
 function Navbar() {
   const [openModal, setOpenModal] = useState(false);
   const [subMenu, setSubMenu] = useState(false);
+  const [q, setQ] = useState("");
+  const [clearQuery, setClearQuery] = useState(false);
+
   const subMenuRef = useRef();
   const avatarRef = useRef();
 
@@ -147,53 +163,84 @@ function Navbar() {
     document.addEventListener("mousedown", outSideClickHandler);
 
     return () => {
-      document.removeEventListener("mousedown", outSideClickHandler)
-    }
+      document.removeEventListener("mousedown", outSideClickHandler);
+    };
   }, []);
+
+  const handleChange = (e) => {
+    setQ(e.target.value);
+    setClearQuery(true);
+  };
+
+  const handleSearch = () => {
+    if (!q) {
+      return;
+    }
+    navigate(`/search?q=${q}`);
+  };
+
+  const handleClearQuery = () => {
+    setQ("");
+    setClearQuery(false);
+  };
 
   return (
     <>
-    <Container>
-      <Wrapper>
-        <Search>
-          <Input placeholder="Search" />
-          <SearchOutlinedIcon />
-        </Search>
-        {currentUser ? (
-          <User>
-            <VideoCallOutlined style={{cursor: "pointer"}}  onClick={() => setOpenModal(true)}/>
-            <Avatar
-              src={currentUser.image}
-              onClick={toggleSubMenu}
-              ref={avatarRef}
-            />
-          </User>
-        ) : (
-          <Link to="/login" style={{ textDecoration: "none" }}>
-            <Button>
-              <AccountCircleOutlinedIcon />
-              SIGN IN
-            </Button>
-          </Link>
-        )}
-        {subMenu && currentUser && (
-          <SubMenu ref={subMenuRef}>
-            <SubMenuWrapper>
-              <Item>
-                <Avatar src={currentUser.image} />
-                {currentUser.name}
-              </Item>
-              <Hr />
-              <Button onClick={handleSignOut}>
-                <LogoutOutlined />
-                SIGN OUT
+      <Container>
+        <Wrapper>
+          <Search>
+            <Input placeholder="Search" onChange={handleChange} value={q} />
+            {clearQuery && q && (
+              <CloseOutlined
+                style={{ cursor: "pointer" }}
+                onClick={handleClearQuery}
+              />
+            )}
+            <SearchIconWrapper>
+              <SearchOutlinedIcon
+                style={{ cursor: "pointer" }}
+                onClick={handleSearch}
+              />
+            </SearchIconWrapper>
+          </Search>
+          {currentUser ? (
+            <User>
+              <VideoCallOutlined
+                style={{ cursor: "pointer" }}
+                onClick={() => setOpenModal(true)}
+              />
+              <Avatar
+                src={currentUser.image}
+                onClick={toggleSubMenu}
+                ref={avatarRef}
+              />
+            </User>
+          ) : (
+            <Link to="/login" style={{ textDecoration: "none" }}>
+              <Button>
+                <AccountCircleOutlinedIcon />
+                SIGN IN
               </Button>
-            </SubMenuWrapper>
-          </SubMenu>
-        )}
-      </Wrapper>
-    </Container>
-    {openModal && <Upload setOpenModal={setOpenModal}/>}
+            </Link>
+          )}
+          {subMenu && currentUser && (
+            <SubMenu ref={subMenuRef}>
+              <SubMenuWrapper>
+                <Item>
+                  <Avatar src={currentUser.image} />
+                  {currentUser.name}
+                </Item>
+                <Hr />
+                <Button onClick={handleSignOut}>
+                  <LogoutOutlined />
+                  SIGN OUT
+                </Button>
+              </SubMenuWrapper>
+            </SubMenu>
+          )}
+        </Wrapper>
+      </Container>
+      {openModal && <Upload setOpenModal={setOpenModal} />}
     </>
   );
 }
