@@ -94,7 +94,7 @@ const Button = styled.button`
 const Label = styled.label`
   font-size: 14px;
 `;
-export const Upload = ({ setOpenModal }) => {
+function Upload ({ setOpenModal }){
   const [image, setImage] = useState(null);
   const [video, setVideo] = useState(null);
   const [imagePercentage, setImagePercentage] = useState(0);

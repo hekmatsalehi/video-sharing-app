@@ -9,7 +9,6 @@ import {
   ThumbUp,
   ThumbUpAltOutlined,
 } from "@mui/icons-material";
-import VideoCard from "../components/VideoCard";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
@@ -19,6 +18,7 @@ import { fetchFailure, fetchSuccess } from "../redux/videoSlice";
 import { format } from "timeago.js";
 import { like, dislike } from "../redux/videoSlice";
 import { subscription } from "../redux/userSlice";
+import Recommendation from "../components/Recommendation";
 
 const Container = styled.div`
   display: flex;
@@ -67,10 +67,6 @@ const Button = styled.div`
 const Hr = styled.hr`
   margin: 15px 0px;
   border: 0.5px solid ${({ theme }) => theme.soft};
-`;
-
-const Recommedation = styled.div`
-  flex: 2;
 `;
 
 const Channel = styled.div`
@@ -228,22 +224,7 @@ function Video() {
         <Hr />
         <Comments videoId={currentVideo._id}/>
       </Content>
-      {/* <Recommedation>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-        <VideoCard type="small"/>
-      </Recommedation> */}
+      <Recommendation tags={currentVideo.tags}/>
     </Container>
   );
 }
