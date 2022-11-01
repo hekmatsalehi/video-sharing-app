@@ -10,6 +10,8 @@ import cookieParser from "cookie-parser";
 const app = express();
 dotenv.config();
 
+const PORT = process.env.PORT || 5010;
+
 const connect = () => {
   mongoose
     .connect(process.env.MONGO_SECRET, {
@@ -42,7 +44,7 @@ app.use((error, req, res, next) => {
   });
 });
 
-app.listen(5010, () => {
+app.listen(PORT, () => {
   connect();
-  console.log("server is running!");
+  console.log(`server is running on port ${PORT}!`);
 });
