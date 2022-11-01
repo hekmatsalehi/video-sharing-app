@@ -1,10 +1,10 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRoutes from "./routes/users.js"
-import videoRoutes from "./routes/videos.js"
-import commentRoutes from "./routes/comments.js"
-import authRoutes from "./routes/auth.js"
+import userRoutes from "./routes/users.js";
+import videoRoutes from "./routes/videos.js";
+import commentRoutes from "./routes/comments.js";
+import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -12,7 +12,10 @@ dotenv.config();
 
 const connect = () => {
   mongoose
-    .connect(process.env.MONGO_SECRET)
+    .connect(process.env.MONGO_SECRET, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
     .then(() => console.log("connected to database!"))
     .catch((error) => {
       throw error;
@@ -36,8 +39,8 @@ app.use((error, req, res, next) => {
     success: false,
     status,
     message,
-  })
-})
+  });
+});
 
 app.listen(5010, () => {
   connect();
