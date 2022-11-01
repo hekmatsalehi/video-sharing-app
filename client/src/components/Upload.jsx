@@ -10,6 +10,7 @@ import {
 } from "firebase/storage";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import app from "../firebase"
 
 const Container = styled.div`
   width: 100%;
@@ -110,7 +111,7 @@ function Upload ({ setOpenModal }){
   };
 
   const uploadFile = (file, urlType) => {
-    const storage = getStorage();
+    const storage = getStorage(app);
 
     // Create new file name to prevent adding duplicate name
     const fileName = new Date().getTime() + file.name;
