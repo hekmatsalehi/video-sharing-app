@@ -12,7 +12,7 @@ dotenv.config();
 
 const connect = () => {
   mongoose
-    .connect(process.env.MONOGOSECRET)
+    .connect(process.env.MONGO_SECRET)
     .then(() => console.log("connected to database!"))
     .catch((error) => {
       throw error;
