@@ -7,6 +7,10 @@ import commentRoutes from "./routes/comments.js";
 import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
 import path from "path";
+import {fileURLToPath} from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 dotenv.config();
@@ -15,14 +19,14 @@ const PORT = process.env.PORT || 5010;
 
 const connect = () => {
   mongoose
-    .connect(process.env.MONGO_SECRET, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
-    .then(() => console.log("connected to database!"))
-    .catch((error) => {
-      throw error;
-    });
+  .connect(process.env.MONGO_SECRET, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("connected to database!"))
+  .catch((error) => {
+    throw error;
+  });
 };
 
 app.use(cookieParser());
@@ -37,7 +41,7 @@ app.use("/api/auth", authRoutes);
 app.use((error, req, res, next) => {
   const status = error.status || 500;
   const message = error.message || "Ohh something went wrong!";
-
+  
   return res.status(status).json({
     success: false,
     status,
