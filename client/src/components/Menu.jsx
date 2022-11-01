@@ -21,7 +21,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Container = styled.div`
-  min-width: 240px;
+  width: 240px;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   min-height: 100vh;

@@ -1,0 +1,27 @@
+{
+  "name": "video-sharing-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "cd server && npm run start",
+    "develop": "concurrently \"cd server && npm run start\" \"cd client && npm run start\"",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "cd client && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hekmatsalehi/video-sharing-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hekmatsalehi/video-sharing-app/issues"
+  },
+  "homepage": "/build",
+  "devDependencies": {
+    "concurrently": "^7.5.0"
+  }
+}
