@@ -24,7 +24,7 @@ function Home({type}) {
   }, [type])
   return (
     <Container>
-        {videos.map((video) => (
+        {videos?.map((video) => (
          <VideoCard key={video._id} video={video}/> 
         ))}
     </Container>
